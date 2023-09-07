@@ -1,19 +1,28 @@
 import styles from './Results.module.scss';
 import './Results.scss';
 import { Card } from 'primereact/card';
+import { Button } from 'primereact/button';
 import Chart from './Chart.tsx'
 import {useState} from "react";
-import dataMock from "./mock.json";
+import dataMock from "./annotations.json";
 import { Carousel } from 'primereact/carousel';
 export default () => {
-    const [isLoading, setIsLoading] = useState(false);
     const [frames] = useState(dataMock.frames);
     const [clusters] = useState(dataMock.clusters);
     const [selectedFrame, setSelectedFrame] = useState(frames[0]);
-    const [selectedCluster] = useState(clusters[0]);
+    const [selectedCluster, setSelectedCluster] = useState(clusters[0]);
     const [selectedFace, setSelectedFace] = useState();
 
-    setTimeout(() => setIsLoading(true), 400);
+    const onFaceClick = (face) => {
+        let cluster = clusters.find((el) => el.cluster_id === face.cluster_id);
+        if(cluster){
+            setSelectedCluster(cluster);
+            let facing = cluster.faces.find((el) => el.face_id === face.face_id)
+            if(facing){
+                setSelectedFace(facing);
+            }
+        }
+    }
 
     const facesList = selectedFrame.faces && selectedFrame.faces.length ? selectedFrame.faces.map((face) => {
         const faceStyle = {
@@ -35,7 +44,7 @@ export default () => {
         }))
         return (<>
             <div className={styles.badge} style={badgeStyle}>Person {face.cluster_id}</div>
-            <div className={styles.face} style={faceStyle}></div>
+            <div className={`${styles.face} ${selectedFace && face.face_id === selectedFace.face_id ? styles.faceActive : ''}`} style={faceStyle} onClick={() => onFaceClick(face)}></div>
             {pointsList}
         </>)
     }) : null
@@ -52,7 +61,6 @@ export default () => {
     };
 
     const selectFace = (face: any) => {
-        console.log(face);
         setSelectedFace(face);
         let frame = frames.find(el=> el.photo_id === face.photo_id);
         if(frame){
@@ -68,18 +76,46 @@ export default () => {
         </div>
     })
 
+    const prevCluster = () => {
+        const pos = clusters.indexOf(selectedCluster);
+        if(pos >= 1 && clusters[pos-1] ){
+            setSelectedCluster(clusters[pos-1]);
+        }
+    }
+
+    const nextCluster = () => {
+        const pos = clusters.indexOf(selectedCluster);
+        if(pos < clusters.length && clusters[pos+1]){
+            setSelectedCluster(clusters[pos+1]);
+        }
+    }
+
+    const clusterListTitle = () => {
+        return (
+            <div className={styles.clusterListTitle}>
+                Persons
+                <div className={styles.clusterListNav}>
+                    <Button icon="pi pi-arrow-left" rounded text onClick={prevCluster} />
+                    Person {selectedCluster.cluster_id}
+                    <Button icon="pi pi-arrow-right" rounded text onClick={nextCluster} />
+                </div>
+            </div>
+        )
+    }
+
     return (
         <div className={styles.layout}>
             <div className={`${styles.block} ${styles.left}`}>
                 <Card title="Summary" subTitle={
                     <div className={styles.cardSubtitle}>
-                    <span>Total frames: 100</span>
-                    <span>Found persons: 100</span>
-                    <span>Processing time: 100</span>
-                    <span>Processing time: 100</span>
+                    <span>Total frames: {frames.length}</span>
+                    <span>Found persons: {clusters.length}</span>
+                    <span>Processing time: 20s</span>
                     </div>
-                }>{isLoading && <Chart />}</Card>
-                <Card title="Persons" className={styles.clusterList} style={{'flex': 1}}>
+                }>
+                    {(clusters.length) && <Chart clusters={clusters} />}
+                </Card>
+                <Card title={clusterListTitle} className={styles.clusterList} style={{'flex': 1}}>
                     <div className={styles.clusterFacesList}>
                         {clusterFacesList}
                     </div>

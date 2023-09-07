@@ -48,8 +48,13 @@
       border: 3px solid yellow;
       position: absolute;
       cursor: pointer;
+      z-index: 1;
 
       &:hover{
+        background: rgba(173, 255, 47, 0.2);
+      }
+
+      &.faceActive{
         background: rgba(173, 255, 47, 0.2);
       }
     }
@@ -102,6 +107,17 @@
 .clusterList{
   min-height: 320px;
   overflow: hidden;
+  .clusterListTitle{
+    display: flex;
+    justify-content: space-between;
+  }
+  .clusterListNav{
+    font-size: 1rem;
+    font-weight: normal;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
 }
 
 .clusterFacesList{
@@ -110,6 +126,7 @@
   overflow: scroll;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: 128px;
   grid-gap: 20px;
 
   .clusterFacesListItem{

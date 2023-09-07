@@ -3,7 +3,7 @@ import { ProgressBar } from 'primereact/progressbar';
 import styles from './Home.module.scss'
 import './Home.scss'
 import Results from "../results/Results.tsx";
-import {useState, useRef, ChangeEvent} from "react";
+import {useState, useRef, ChangeEvent, useEffect} from "react";
 
 export default () => {
     const [files, setFiles] = useState<FileList>();
@@ -20,6 +20,10 @@ export default () => {
             filesInputRef.current?.click();
         }
     }
+
+    useEffect(() => {
+        console.log(2222);
+    })
 
     const sleep = (ms: number) => {
         return new Promise((resolve) => {

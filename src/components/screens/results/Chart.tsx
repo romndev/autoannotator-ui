@@ -1,18 +1,30 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Chart } from 'primereact/chart';
 
-export default function BasicDemo() {
+export default function BasicDemo({clusters}) {
     const [chartData, setChartData] = useState({});
-    const [chartOptions, setChartOptions] = useState({});
+    const [chartOptions, setChartOptions] = useState(undefined);
+
+    const chartRef = useRef(null)
+
+    const delay = async (ms =0) => new Promise((resolve) => setTimeout(resolve, ms))
+
+    const setData = async (data, options) =>{
+        await delay(300);
+        setChartData(data);
+        setChartOptions(options);
+    }
 
     useEffect(() => {
+
+        console.log(clusters.length);
         const data = {
-            labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+            labels: clusters.reduce((acc, cur) => [...acc, 'Person '+ cur.cluster_id], []),
             datasets: [
                 {
-                    label: 'Sales',
-                    data: [540, 325, 702, 620],
+                    label: 'Persons',
+                    data: clusters.reduce((acc, cur) => [...acc, cur.faces.length], []),
                     backgroundColor: [
                         'rgba(255, 159, 64, 0.2)',
                         'rgba(75, 192, 192, 0.2)',
@@ -36,14 +48,13 @@ export default function BasicDemo() {
                 }
             }
         };
+        setData(data, options)
 
-        setChartData(data);
-        setChartOptions(options);
-    }, []);
+    }, [clusters, chartRef]);
 
     return (
-        <div className="card">
-            <Chart type="bar" data={chartData} options={chartOptions} />
-        </div>
+        <>
+            {chartData && <Chart type="bar" ref={chartRef} data={chartData} options={chartOptions} />}
+        </>
     )
 }

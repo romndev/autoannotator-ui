@@ -1,0 +1,171 @@
+{
+  "frames": [
+    {
+      "photo_id": 1,
+      "image": "1.jpg",
+      "width": 1280,
+      "height": 960,
+      "faces": [
+        {
+          "face_id": 1,
+          "cluster_id": 1,
+          "x1": 500,
+          "y1": 50,
+          "x2": 800,
+          "y2": 400,
+          "points": [
+            [600,160],
+            [720,170]
+          ]
+        }
+      ]
+    },
+    {
+      "photo_id": 2,
+      "image": "2.jpg",
+      "width": 1280,
+      "height": 960
+    },
+    {
+      "photo_id": 2,
+      "image": "3.jpg",
+      "width": 1280,
+      "height": 960
+    },
+    {
+      "photo_id": 2,
+      "image": "4.jpg",
+      "width": 1280,
+      "height": 960
+    },
+    {
+      "photo_id": 2,
+      "image": "5.jpg",
+      "width": 1280,
+      "height": 960
+    },
+    {
+      "photo_id": 2,
+      "image": "6.jpg",
+      "width": 1280,
+      "height": 960
+    },
+    {
+      "photo_id": 2,
+      "image": "1.jpg",
+      "width": 1280,
+      "height": 960
+    },
+    {
+      "photo_id": 2,
+      "image": "1.jpg",
+      "width": 1280,
+      "height": 960
+    },
+    {
+      "photo_id": 2,
+      "image": "1.jpg",
+      "width": 1280,
+      "height": 960
+    },
+    {
+      "photo_id": 2,
+      "image": "1.jpg",
+      "width": 1280,
+      "height": 960
+    },
+    {
+      "photo_id": 2,
+      "image": "1.jpg",
+      "width": 1280,
+      "height": 960
+    }
+  ],
+  "clusters": [
+    {
+      "cluster_id": 1,
+      "faces": [
+        {
+          "face_id": 1,
+          "photo_id": 1,
+          "image": "1.jpg"
+        },
+        {
+          "face_id": 1,
+          "photo_id": 1,
+          "image": "1.jpg"
+        },
+        {
+          "face_id": 1,
+          "photo_id": 1,
+          "image": "1.jpg"
+        },
+        {
+          "face_id": 1,
+          "photo_id": 1,
+          "image": "1.jpg"
+        },
+        {
+          "face_id": 1,
+          "photo_id": 1,
+          "image": "1.jpg"
+        },
+        {
+          "face_id": 1,
+          "photo_id": 1,
+          "image": "1.jpg"
+        },
+        {
+          "face_id": 1,
+          "photo_id": 1,
+          "image": "1.jpg"
+        },
+        {
+          "face_id": 1,
+          "photo_id": 1,
+          "image": "1.jpg"
+        },
+        {
+          "face_id": 1,
+          "photo_id": 1,
+          "image": "1.jpg"
+        },
+        {
+          "face_id": 1,
+          "photo_id": 1,
+          "image": "1.jpg"
+        },
+        {
+          "face_id": 1,
+          "photo_id": 1,
+          "image": "1.jpg"
+        },
+        {
+          "face_id": 1,
+          "photo_id": 1,
+          "image": "1.jpg"
+        },
+        {
+          "face_id": 1,
+          "photo_id": 1,
+          "image": "1.jpg"
+        },
+        {
+          "face_id": 1,
+          "photo_id": 1,
+          "image": "1.jpg"
+        },
+        {
+          "face_id": 1,
+          "photo_id": 1,
+          "image": "1.jpg"
+        },
+        {
+          "face_id": 1,
+          "photo_id": 1,
+          "image": "1.jpg"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+.p-card-body {
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+}
+.p-card .p-card-content {
+  padding: 0!important;
+  height: 100%;
+  flex: 1;
+  overflow: hidden;
+}
+

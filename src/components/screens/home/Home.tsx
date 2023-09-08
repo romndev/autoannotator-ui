@@ -3,12 +3,15 @@ import { ProgressBar } from 'primereact/progressbar';
 import styles from './Home.module.scss'
 import './Home.scss'
 import Results from "../results/Results.tsx";
-import {useState, useRef, ChangeEvent, useEffect} from "react";
+import dataMock from "../results/annotations.json";
+import {useState, useRef, ChangeEvent } from "react";
+
 
 export default () => {
     const [files, setFiles] = useState<FileList>();
     const [isSuccess, setIsSuccess] = useState(false);
     const [progress, setProgress] = useState(0);
+    const [result, setResult] = useState(dataMock);
 
     const filesInputRef = useRef<HTMLInputElement>(null)
     const folderInputRef = useRef<HTMLInputElement>(null)
@@ -21,14 +24,26 @@ export default () => {
         }
     }
 
-    useEffect(() => {
-        console.log(2222);
-    })
-
-    const sleep = (ms: number) => {
-        return new Promise((resolve) => {
-            setTimeout(resolve, ms);
-        })
+    const getProgress = (task_id: string) => {
+        //Simple javascript code which listens to the stream.
+        let source = new EventSource(`/api/task/${task_id}/stream`);
+        source.addEventListener('progress', function(event) {
+            setProgress(parseInt(event.data));
+        }, false);
+        source.addEventListener('result', function(event) {
+            setProgress(100);
+            console.log(event);
+            try{
+                setResult(JSON.parse(event.data));
+                setIsSuccess(true);
+            }catch(e){
+                console.log(e);
+            }
+            source.close();
+        }, false);
+        source.addEventListener('error', function (event) {
+            console.log("Error"+ event)
+        }, false);
     }
 
     const onChange = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -37,12 +52,36 @@ export default () => {
         }
         setFiles(e.target.files);
 
-        for(let i=0; i<=100; i++){
-            setProgress(i);
-            await sleep(50);
-        }
 
-        setIsSuccess(true);
+        const formData = new FormData();
+        for(const file of e.target.files){
+            formData.append('files', file);
+        }
+        //formData.append('files[]', file);
+
+
+        fetch('/api/upload', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('File upload failed');
+                }
+            })
+            .then(data => {
+                console.log('Server response:', data);
+                getProgress(data.task_id);
+            })
+            .catch(error => {
+                console.error('Error uploading file:', error);
+            });
+
+
+
+        // setIsSuccess(true);
 
     }
 
@@ -57,20 +96,14 @@ export default () => {
         </div>)
     }
 
-    const HomeScreen = () => {
-        return (
-        <div className={styles.layout}>
+    return (
+        <>
+        {!isSuccess ?
+                (<div className={styles.layout}>
             <img src="/logo.png" className={styles.logo} onClick={() => setIsSuccess(true)}/>
             {!files?.length ? <UploadButtons /> : <div className={styles.progress}>
                 Processing...
                 <ProgressBar value={progress}/>
             </div>}
-        </div>)
-    }
-
-    return (
-        <>
-            { isSuccess ? <Results /> : <HomeScreen /> }
-        </>
-    )
+        </div>) : <Results data={result} />} </>)
 }

@@ -6,9 +6,12 @@ import Chart from './Chart.tsx'
 import {useState} from "react";
 import dataMock from "./annotations.json";
 import { Carousel } from 'primereact/carousel';
-export default () => {
-    const [frames] = useState(dataMock.frames);
-    const [clusters] = useState(dataMock.clusters);
+import moment from 'moment';
+
+type dataType = typeof dataMock
+export default ({data}: {data: dataType}) => {
+    const [frames] = useState(data.frames);
+    const [clusters] = useState(data.clusters);
     const [selectedFrame, setSelectedFrame] = useState(frames[0]);
     const [selectedCluster, setSelectedCluster] = useState(clusters[0]);
     const [selectedFace, setSelectedFace] = useState();
@@ -29,10 +32,14 @@ export default () => {
             top: (face.y1 / selectedFrame.height) * 100 + '%',
             left: (face.x1 / selectedFrame.width) * 100 + '%',
             width: ((face.x2 - face.x1) / selectedFrame.width) * 100 + '%',
-            height: ((face.y2 - face.y1) / selectedFrame.width) * 100 + '%',
+            height: ((face.y2 - face.y1) / selectedFrame.height) * 100 + '%',
+        }
+        let badgeFrom = face.y1
+        if(face.y1 < 50){
+            badgeFrom = face.y2+25;
         }
         const badgeStyle = {
-            bottom: ((selectedFrame.height - face.y1) / selectedFrame.height) * 100 + '%',
+            bottom: ((selectedFrame.height - badgeFrom) / selectedFrame.height) * 100 + '%',
             left: (face.x1 / selectedFrame.width) * 100 + '%',
         }
         const pointsList = face.points.map((point => {
@@ -103,6 +110,9 @@ export default () => {
         )
     }
 
+    let tempTime = moment.duration(data.totalTime ?? 0);
+    let duration = tempTime.minutes() ? tempTime.minutes() + ':' + tempTime.seconds() + 'm' : tempTime.seconds() + 's'
+
     return (
         <div className={styles.layout}>
             <div className={`${styles.block} ${styles.left}`}>
@@ -110,7 +120,7 @@ export default () => {
                     <div className={styles.cardSubtitle}>
                     <span>Total frames: {frames.length}</span>
                     <span>Found persons: {clusters.length}</span>
-                    <span>Processing time: 20s</span>
+                    <span>Processing time: {duration}</span>
                     </div>
                 }>
                     {(clusters.length) && <Chart clusters={clusters} />}

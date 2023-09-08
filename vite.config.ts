@@ -9,7 +9,7 @@ export default defineConfig({
     port: 8080,
     proxy: {
       '^/api.*': {
-        target: 'http://localhost:8000',
+        target: 'http://aa_client:8000',
         rewrite: (path) => path.replace(/^\/api/, ''),
       },
     }

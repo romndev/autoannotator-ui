@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     host: true,
     strictPort: true,
-    port: process.env.PORT ?? 8080,
+    port: process.env.APP_PORT ?? 8080,
     proxy: {
       '^/api.*': {
         target: process.env.API_HOST ?? 'http://localhost:8000',
